@@ -1,0 +1,27 @@
+Ref,Qty,Value,Part / example,Footprint,Notes
+U1A U1B,2,1x7 female header,2.54 mm socket strip,PinSocket_1x07,For Seeed XIAO ESP32-C3; rows 15.24 mm apart
+J4,1,1x4 female header,2.54 mm socket strip,PinSocket_1x04,RXB6 receiver: GND DATA DATA VCC (check your module)
+J1,1,2-pin screw terminal,Phoenix PT 1.5/2-3.5-H,3.5 mm,Power in: +12V after contact / GND
+J2,1,3-pin screw terminal,Phoenix PT 1.5/3-3.5-H,3.5 mm,Dashboard: +12V out / ON / OFF
+J3,1,3-pin screw terminal,Phoenix PT 1.5/3-3.5-H,3.5 mm,DME signal (from car) / FLAP signal (to actuator) / GND
+F1,1,PTC 0.5 A 60 V,Bourns MF-R050,radial 5.1 mm,Resettable fuse
+D1,1,1N5819,Schottky 1 A 40 V,DO-41 vertical,Reverse-polarity protection (stripe = +12V side)
+D2,1,P6KE20A,TVS 600 W unidirectional,DO-15 vertical,Stripe toward +12V
+D3 D4,2,BZX79-C3V3,Zener 3.3 V 0.5 W,DO-35 vertical,Input clamp (stripe toward GPIO)
+D5,1,1N4148,Signal diode,DO-35 vertical,Relay flyback (stripe toward +12V)
+U2,1,L7805,5 V linear regulator TO-220,TO-220 vertical,Feeds ESP32 5V pin
+C1,1,100 uF 35 V,Electrolytic,D6.3 mm P2.5,Observe polarity
+C2,1,330 nF,Ceramic 50 V,P2.5,Regulator input
+C3 C5 C6,3,100 nF,Ceramic 50 V,P2.5,
+C4,1,10 uF 25 V,Electrolytic,D5 mm P2.0,Observe polarity
+R1 R3,2,10 k,1/4 W,vertical P2.54,Input divider top
+R2 R4,2,3.3 k,1/4 W,vertical P2.54,Input divider bottom
+R5 R7,2,1 k,1/4 W,vertical P2.54,Transistor base
+R6 R8,2,100 k,1/4 W,vertical P2.54,Base pull-down (keeps relay off during boot)
+R9,1,1 k (optional),1/4 W,vertical P2.54,PWM pull-up to 12 V - fit only if measurement shows it is needed
+R10 / R11,1,TBD,1/4 W,vertical P2.54,Dummy load - fit ONE: R10 to GND or R11 to 12V (value = measured actuator input)
+Q1 Q2,2,BC337,NPN TO-92 (C-B-E),TO-92 wide,Q1 relay coil / Q2 PWM driver
+K1,1,G5V-2-12VDC,Omron DPDT signal relay,G5V-2,
+D6,1,1N5819,Schottky 1 A 40 V,DO-41 vertical,Isolates XIAO 5V pin from regulator (USB can stay plugged)
+-,1,XIAO ESP32-C3,Seeed Studio,-,Comes with external antenna (u.FL)
+-,1,RXB6,433 or 315 MHz receiver,-,Match your remote's frequency
