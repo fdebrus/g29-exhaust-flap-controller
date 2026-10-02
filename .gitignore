@@ -1,0 +1,15 @@
+# KiCad
+*.kicad_prl
+*-backups/
+fp-info-cache
+*.bak
+# Generator intermediates
+tools/pcb-generator/*.dsn
+tools/pcb-generator/*.ses
+tools/pcb-generator/placed.kicad_pcb
+tools/pcb-generator/*.log
+tools/pcb-generator/drc.rpt
+# Arduino / OS
+build/
+.DS_Store
+Thumbs.db
