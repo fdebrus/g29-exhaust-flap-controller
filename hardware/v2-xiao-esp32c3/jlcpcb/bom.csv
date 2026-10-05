@@ -1,0 +1,20 @@
+Comment,Designator,Footprint,LCSC Part #,Notes
+100uF 35V,C1,CP_Radial_D6.3mm_P2.50mm,,matched automatically on your first upload; keep that pick
+100nF 50V,C2,C_Disc_D3.0mm_W2.0mm_P2.50mm,C94703,Was 330nF; 100nF is fine with C1 (100uF) adjacent. Same part as C3/C5/C6
+100nF 50V,"C3,C5,C6",C_Disc_D3.0mm_W2.0mm_P2.50mm,C94703,ACC-B104K500P52 leaded MLCC X7R 50V (verified on JLC page). Lead pitch 5.08 vs 2.5 footprint: wave/hand soldered so OK; accept the footprint warning
+10uF 25V,C4,CP_Radial_D5.0mm_P2.00mm,,matched automatically on your first upload; keep that pick
+1N5819,"D1,D6",D_DO-41_SOD81_P3.81mm_Vertical_AnodeUp,C19983441,1N5819-AP MCC DO-41 (verified; 2700 in stock; wave soldering). Replace with your auto-match if you prefer
+P6KE20A,D2,D_DO-15_P5.08mm_Vertical_AnodeUp,,matched automatically on your first upload; keep that pick
+BZX79-C3V3,"D3,D4",D_DO-35_SOD27_P2.54mm_Vertical_AnodeUp,,matched automatically on your first upload; keep that pick
+1N4148,D5,D_DO-35_SOD27_P2.54mm_Vertical_AnodeUp,,matched automatically on your first upload; keep that pick
+G5V-2-H1 DC12,K1,Relay_DPDT_Omron_G5V-2,C128021,verified; Extended; check stock
+BC337,"Q1,Q2",TO-92_Inline_Wide,,matched automatically on your first upload; confirm pinout is C-B-E (BC337-25 or -40)
+10k,"R1,R3",R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,C57436,MFR0W4F1002A50 UNI-ROYAL 1/4W 1% metal film D2.2xL6.5 (verified)
+3.3k,"R2,R4",R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,C58610,MFR0W4F3301A50 (verified on LCSC; 16k in stock)
+1k,"R5,R7",R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,C57435,MFR0W4F1001A50 (verified)
+100k,"R6,R8",R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,C58597,MFR0W4F1003A50 (verified on LCSC; 2450 in stock)
+L7805,U2,TO-220-3_Vertical,,matched automatically on your first upload; keep that pick
+Screw terminal 2P 3.5mm,J1,"TerminalBlock_Phoenix_PT-1,5-2-3.5-H_1x02_P3.50mm_Horizontal",C6366685,"Phoenix 1716933 2P 3.5mm (JLC page seen). If shown as Pre-order, Search ""3.5mm 2P screw terminal"" and pick in-stock"
+Screw terminal 3P 3.5mm,"J2,J3","TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal",C6943200,"Dinkle EK350A-03P 3P 3.5mm (JLC page seen). If Pre-order, Search ""3.5mm 3P screw terminal"" and pick in-stock"
+Female header 1x7 2.54mm,"U1A,U1B",PinSocket_1x07_P2.54mm_Vertical,C6669651,"PreciDip 316-87-107-41-008101 (JLC page seen, likely Pre-order). Prefer any in-stock ""Female Header 7 Position 2.54mm"" found via Search"
+Female header 1x4 2.54mm,J4,PinSocket_1x04_P2.54mm_Vertical,,"Search ""Female Header 4 Position 2.54mm single row""; several in stock, no number verified"

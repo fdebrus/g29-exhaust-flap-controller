@@ -1,0 +1,26 @@
+Ref,Qty,Value,Current THT part,SMT replacement (MPN),Package,LCSC #,JLC class,Assembled by,LCSC # verified,Notes
+R1 R3,2,10k,1/4 W axial,0805 thick film 10k 5%,0805,C2889526,Basic/Preferred (check),JLCPCB SMT,yes (page seen),Input divider top
+R2 R4,2,3.3k,1/4 W axial,0805 thick film 3.3k 5%,0805,search "0805 3.3K" in library,Basic/Preferred (check),JLCPCB SMT,no,Input divider bottom; pick any in-stock Basic 0805 3.3k
+R5 R7,2,1k,1/4 W axial,0805 thick film 1k 5%,0805,search "0805 1K" in library,Basic/Preferred (check),JLCPCB SMT,no,Transistor base
+R6 R8,2,100k,1/4 W axial,0805 thick film 100k 5%,0805,C2889546,Basic/Preferred (check),JLCPCB SMT,yes (page seen),Base pull-down
+R9,1,1k (optional),1/4 W axial,0805 thick film 1k 5%,0805,same as R5,-,DNP by default,-,PWM pull-up to 12 V; fit only if measurement requires it. Leave unpopulated in CPL.
+R10 / R11,1,TBD,1/4 W axial,1206 thick film (value after measurement),1206,TBD,-,DNP,-,Dummy load. 1206 gives 250 mW headroom. Populate by hand after measuring.
+C2,1,330 nF 50 V,ceramic P2.5,0805 X7R 330nF 50V,0805,search "0805 330nF 50V" in library,Extended (check),JLCPCB SMT,no,Regulator input
+C3 C5 C6,3,100 nF 50 V,ceramic P2.5,0805 X7R 100nF 50V,0805,search "0805 100nF 50V" in library,Basic (check),JLCPCB SMT,no,C5/C6 under the XIAO: 0805 is low enough with socket strips
+C1,1,100 uF 35 V,electrolytic D6.3,SMD electrolytic 100uF 35V,6.3x7.7 (D case),search "100uF 35V SMD electrolytic" in library,Extended,JLCPCB SMT or hand,no,Or keep THT and solder by hand (1 part)
+C4,1,10 uF 25 V,electrolytic D5,0805 X5R 10uF 25V (ceramic),0805,search "0805 10uF 25V" in library,Basic/Extended (check),JLCPCB SMT,no,Ceramic is fine here (regulator output)
+D1,1,1N5819,DO-41,SS14,SMA (DO-214AC),C2480,Basic (historically),JLCPCB SMT,yes (page seen),Reverse-polarity protection; cathode band toward +12V
+D6,1,1N5819,DO-41,SS14,SMA (DO-214AC),C2480,Basic (historically),JLCPCB SMT,yes (page seen),Isolates XIAO 5V pin; band toward the XIAO
+D2,1,P6KE20A,DO-15,SMAJ20A (600 W unidirectional TVS),SMA (DO-214AC),search "SMAJ20A" in library,Extended,JLCPCB SMT,no,Stripe toward +12V. 400 W (SMAJ) vs 600 W (P6KE): acceptable for a 12 V car rail behind a 0.5 A PTC. If you want 600 W use SMBJ20A (SMB).
+D3 D4,2,BZX79-C3V3,DO-35,BZT52C3V3,SOD-123,search "BZT52C3V3" in library,Basic/Extended (check),JLCPCB SMT,no,Input clamp; stripe toward GPIO
+D5,1,1N4148,DO-35,1N4148W,SOD-123,C81598,Basic (historically),JLCPCB SMT,yes (page seen),Relay flyback; stripe toward +12V
+Q1 Q2,2,BC337,TO-92,S8050 (NPN SOT-23),SOT-23,search "S8050 SOT-23" in library; several Basic variants,Basic (check),JLCPCB SMT,no,Pinout SOT-23 B-E-C differs from BC337 C-B-E: use the SOT-23 footprint from KiCad lib. 500 mA, more than enough for the G5V-2 coil (12.5 mA on the H1 variant)
+U2,1,L7805,TO-220,78M05 (0.5 A),DPAK (TO-252),search "78M05 TO-252" in library,Basic/Extended (check),JLCPCB SMT,no,Board draws well under 200 mA. Add copper pour under the tab. Alternative: keep TO-220 and hand-solder.
+F1,1,PTC 0.5 A 60 V,radial,SMD PTC 0.5 A 60 V (e.g. 1812L050/60),1812,search "1812 PTC 0.5A 60V" in library,Extended,JLCPCB SMT,no,Or keep radial MF-R050 and hand-solder
+K1,1,G5V-2-12VDC,THT,G5V-2-H1 DC12 (same footprint),THT,C128021,Extended,JLCPCB THT (Standard assembly) or hand,yes (LCSC listing seen),High-sensitivity version: 960 ohm coil / 12.5 mA. Same pinout as G5V-2. Check stock before ordering.
+J1,1,2-pin screw terminal 3.5 mm,THT,keep,THT,-,-,Hand,-,Leave out of the JLC BOM/CPL
+J2 J3,2,3-pin screw terminal 3.5 mm,THT,keep,THT,-,-,Hand,-,Leave out of the JLC BOM/CPL
+U1A U1B,2,1x7 female header,THT,keep,THT,-,-,Hand,-,For the XIAO. Leave out of the JLC BOM/CPL
+J4,1,1x4 female header,THT,keep,THT,-,-,Hand,-,For the RXB6. Leave out of the JLC BOM/CPL
+-,1,XIAO ESP32-C3,module,keep (not in JLC library),-,-,-,Hand,-,Buy from Seeed or a distributor
+-,1,RXB6 433 MHz,module,keep (not in JLC library),-,-,-,Hand,-,
