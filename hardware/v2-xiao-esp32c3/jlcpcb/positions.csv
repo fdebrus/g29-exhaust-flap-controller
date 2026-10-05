@@ -1,31 +1,31 @@
 Designator,Val,Package,Mid X,Mid Y,Rotation,Layer
-C1,100uF 35V,CP_Radial_D6.3mm_P2.50mm,155.2500mm,-110.3000mm,0,top
-C2,100nF 50V,C_Disc_D3.0mm_W2.0mm_P2.50mm,144.7500mm,-121.0000mm,0,top
-C3,100nF 50V,C_Disc_D3.0mm_W2.0mm_P2.50mm,149.7500mm,-121.0000mm,0,top
-C4,10uF 25V,CP_Radial_D5.0mm_P2.00mm,155.5000mm,-121.0000mm,0,top
-C5,100nF 50V,C_Disc_D3.0mm_W2.0mm_P2.50mm,107.2500mm,-122.6000mm,0,top
-C6,100nF 50V,C_Disc_D3.0mm_W2.0mm_P2.50mm,113.2500mm,-122.6000mm,0,top
-D1,1N5819,D_DO-41_SOD81_P3.81mm_Vertical_AnodeUp,154.9050mm,-104.0000mm,0,top
-D2,P6KE20A,D_DO-15_P5.08mm_Vertical_AnodeUp,146.5400mm,-109.5000mm,0,top
-D3,BZX79-C3V3,D_DO-35_SOD27_P2.54mm_Vertical_AnodeUp,114.7700mm,-126.5000mm,0,top
-D4,BZX79-C3V3,D_DO-35_SOD27_P2.54mm_Vertical_AnodeUp,131.2700mm,-126.5000mm,0,top
-D5,1N4148,D_DO-35_SOD27_P2.54mm_Vertical_AnodeUp,157.2700mm,-132.5000mm,0,top
-D6,1N5819,D_DO-41_SOD81_P3.81mm_Vertical_AnodeUp,145.9050mm,-126.5000mm,0,top
-K1,G5V-2-H1 DC12,Relay_DPDT_Omron_G5V-2,131.8100mm,-112.8900mm,0,top
-Q1,BC337,TO-92_Inline_Wide,116.0400mm,-132.5000mm,0,top
-Q2,BC337,TO-92_Inline_Wide,135.0400mm,-132.5000mm,0,top
-R1,10k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,103.7700mm,-126.5000mm,0,top
-R2,3.3k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,109.2700mm,-126.5000mm,0,top
-R3,10k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,120.2700mm,-126.5000mm,0,top
-R4,3.3k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,125.7700mm,-126.5000mm,0,top
-R5,1k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,103.7700mm,-132.5000mm,0,top
-R6,100k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,109.2700mm,-132.5000mm,0,top
-R7,1k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,122.7700mm,-132.5000mm,0,top
-R8,100k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,128.2700mm,-132.5000mm,0,top
-U2,L7805,TO-220-3_Vertical,147.5400mm,-116.5000mm,0,top
-J1,Screw terminal 2P,"TerminalBlock_Phoenix_PT-1,5-2-3.5-H_1x02_P3.50mm_Horizontal",125.7500mm,-141.0000mm,0,top
-J2,Screw terminal 3P,"TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal",107.5000mm,-141.0000mm,0,top
-J3,Screw terminal 3P,"TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal",147.5000mm,-141.0000mm,0,top
-U1A,Female header 1x7,PinSocket_1x07_P2.54mm_Vertical,104.0000mm,-111.6200mm,0,top
-U1B,Female header 1x7,PinSocket_1x07_P2.54mm_Vertical,119.2400mm,-111.6200mm,0,top
-J4,Female header 1x4,PinSocket_1x04_P2.54mm_Vertical,124.0000mm,-107.8100mm,0,top
+C1,100uF 35V,CP_Radial_D6.3mm_P2.50mm,154.0000mm,-110.3000mm,0,top
+C2,100nF 50V,C_Disc_D3.0mm_W2.0mm_P2.50mm,143.5000mm,-121.0000mm,0,top
+C3,100nF 50V,C_Disc_D3.0mm_W2.0mm_P2.50mm,148.5000mm,-121.0000mm,0,top
+C4,10uF 25V,CP_Radial_D5.0mm_P2.00mm,154.5000mm,-121.0000mm,0,top
+C5,100nF 50V,C_Disc_D3.0mm_W2.0mm_P2.50mm,106.0000mm,-122.6000mm,0,top
+C6,100nF 50V,C_Disc_D3.0mm_W2.0mm_P2.50mm,112.0000mm,-122.6000mm,0,top
+D1,1N5819,D_DO-41_SOD81_P3.81mm_Vertical_AnodeUp,153.0000mm,-104.0000mm,0,top
+D2,P6KE20A,D_DO-15_P5.08mm_Vertical_AnodeUp,144.0000mm,-109.5000mm,0,top
+D3,BZX79-C3V3,D_DO-35_SOD27_P2.54mm_Vertical_AnodeUp,113.5000mm,-126.5000mm,0,top
+D4,BZX79-C3V3,D_DO-35_SOD27_P2.54mm_Vertical_AnodeUp,130.0000mm,-126.5000mm,0,top
+D5,1N4148,D_DO-35_SOD27_P2.54mm_Vertical_AnodeUp,156.0000mm,-132.5000mm,0,top
+D6,1N5819,D_DO-41_SOD81_P3.81mm_Vertical_AnodeUp,144.0000mm,-126.5000mm,0,top
+K1,G5V-2-H1 DC12,Relay_DPDT_Omron_G5V-2,128.0000mm,-104.0000mm,0,top
+Q1,BC337,TO-92_Inline_Wide,113.5000mm,-132.5000mm,0,top
+Q2,BC337,TO-92_Inline_Wide,132.5000mm,-132.5000mm,0,top
+R1,10k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,102.5000mm,-126.5000mm,0,top
+R2,3.3k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,108.0000mm,-126.5000mm,0,top
+R3,10k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,119.0000mm,-126.5000mm,0,top
+R4,3.3k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,124.5000mm,-126.5000mm,0,top
+R5,1k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,102.5000mm,-132.5000mm,0,top
+R6,100k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,108.0000mm,-132.5000mm,0,top
+R7,1k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,121.5000mm,-132.5000mm,0,top
+R8,100k,R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical,127.0000mm,-132.5000mm,0,top
+U2,L7805,TO-220-3_Vertical,145.0000mm,-116.5000mm,0,top
+J1,Screw terminal 2P,"TerminalBlock_Phoenix_PT-1,5-2-3.5-H_1x02_P3.50mm_Horizontal",124.0000mm,-141.0000mm,0,top
+J2,Screw terminal 3P,"TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal",104.0000mm,-141.0000mm,0,top
+J3,Screw terminal 3P,"TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal",144.0000mm,-141.0000mm,0,top
+U1A,Female header 1x7,PinSocket_1x07_P2.54mm_Vertical,104.0000mm,-104.0000mm,0,top
+U1B,Female header 1x7,PinSocket_1x07_P2.54mm_Vertical,119.2400mm,-104.0000mm,0,top
+J4,Female header 1x4,PinSocket_1x04_P2.54mm_Vertical,124.0000mm,-104.0000mm,0,top

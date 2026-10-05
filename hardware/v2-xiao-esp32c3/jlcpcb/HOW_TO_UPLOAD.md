@@ -7,8 +7,10 @@ Three files, upload in this order:
    (through-hole), assemble **2** boards, top side.
 2. `bom.csv` — 19 lines, 30 parts: all passives, diodes, transistors, regulator, relay,
    screw terminals and socket strips. C2 is 100 nF (was 330 nF; C1 100 µF sits next to it).
-3. `positions.csv` — placement of those 30 parts. Mid X/Y is the centre of each footprint's
-   pads, same origin and Y convention as the Gerbers (X as KiCad, Y negated).
+3. `positions.csv` — placement of those 30 parts. Mid X/Y is the KiCad footprint origin (pad 1
+   for these THT footprints), as a KiCad export would give it; JLCPCB applies its own per-part
+   offsets to that. Y negated as in the Gerbers. Do not "correct" to pad centroids: that fights
+   JLC's offsets and misplaces most parts in the preview.
 
 ## Parts matching step
 
@@ -29,7 +31,11 @@ footprint as the G5V-2-12VDC in the schematic; the 1 k base resistor is fine for
 
 F1 PTC (not in JLC library); XIAO ESP32-C3; RXB6 and antenna; R9, R10, R11 (DNP until measured).
 
-## Before confirming
+## In the placement preview
+
+The preview renders horizontal part models on vertical-mount footprints, so axial parts
+(resistors, diodes, ceramics) look like they overhang one pad. That is cosmetic for THT: the
+holes are what count, and the operators insert by the holes. Fix only genuine problems:
 
 - Diodes D1, D2, D5, D6, D3, D4: KiCad pad 1 (square, left) is the **cathode**. JLC marks the
   anode "A"/"+": it must be on the **right** pad. Rotate 180° in the preview if not.
@@ -37,6 +43,6 @@ F1 PTC (not in JLC library); XIAO ESP32-C3; RXB6 and antenna; R9, R10, R11 (DNP 
 - Q1, Q2: KiCad pad 1 (left) is the collector of the BC337. Check which pin JLC's part calls
   pin 1; rotate if their pin 1 is the emitter. Flat face toward the silkscreen D-shape.
 - Screw terminals: wire openings toward the bottom board edge.
-- Relay K1: pin 1 at the top-left square pad.
+- Relay K1: pin 1 at the top-left square pad; body must cover both pin columns.
 - Expect ~$8 setup + per-joint fee (THT ~$0.017/joint) + $3 per extended part. Untick stencil.
 - Re-check everything in the DFM report 4–6 h after ordering; production starts after that.
