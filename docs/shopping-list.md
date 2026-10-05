@@ -13,11 +13,11 @@ Full component list per board: see `hardware/v2-xiao-esp32c3/bom.csv`.
 - Back-probe pins, multimeter
 
 ## Installation
-- Add-a-fuse tap (check fuse type in the G29 fuse box)
+- Add-a-fuse tap for the rear fuse box (mini low-profile type, check yours) + 2-3 A fuse
 - Automotive wire 0.5-0.75 mm², several colours
 - Solder sleeves or heat-shrink butt connectors
 - Small enclosure (about 70 x 55 x 30 mm), foam tape or cable ties
-- Fabric harness tape
+- Fabric harness tape (tesa 51608, 15 mm)
 
 ## PCB
-- v2 Gerbers, ordered from any PCB maker (usually 5 pieces minimum)
+- Gerbers from `hardware/v2-xiao-esp32c3/`, ordered from any PCB maker (usually 5 pieces minimum)

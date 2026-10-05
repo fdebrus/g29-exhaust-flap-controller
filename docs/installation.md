@@ -1,6 +1,6 @@
 # Assembly and installation
 
-## Before ordering the PCB (v2)
+## Before ordering the PCB
 
 1. Measurement done, signal confirmed **PWM** ([measurement.md](measurement.md)).
 2. Print `hardware/v2-xiao-esp32c3/preview_front.png` at 1:1 (60 x 46 mm) and lay the XIAO on it:
@@ -26,7 +26,7 @@
 4. Flash with the RF codes at 0, open the Serial Monitor (115200), press ON / AUTO / OFF on the fob,
    copy the three codes into `RF_CODE_ON`, `RF_CODE_AUTO`, `RF_CODE_OFF`, flash again.
 
-Pins (v2): GPIO3 PWM, GPIO4 relay, GPIO5 RF data, GPIO6 dash ON, GPIO7 dash OFF.
+Pins: GPIO3 PWM, GPIO4 relay, GPIO5 RF data, GPIO6 dash ON, GPIO7 dash OFF.
 
 ## Bench test (before the car)
 
@@ -36,22 +36,32 @@ Pins (v2): GPIO3 PWM, GPIO4 relay, GPIO5 RF data, GPIO6 dash ON, GPIO7 dash OFF.
 - Check the signal on the FLAP terminal with the logic analyser (with divider): same frequency/duty as measured.
 - Remove power while in ON -> relay must drop.
 
+## Where to work on the car
+
+Right-hand side of the trunk, behind the fuse-box cover and the EPP foam block. The actuator
+wiring passes through the floor grommet below the rear power distribution box. Full survey and
+wire identification procedure: [harness.md](harness.md).
+
+Battery negative disconnected before opening the loom or cutting anything.
+
 ## Connections in the car
 
-| Terminal | Pin | Connect to |
-|---|---|---|
-| J1 POWER | 12V | Switched +12 V (after ignition) via an add-a-fuse tap - check the fuse type in your fuse box |
-| J1 POWER | GND | Chassis ground |
-| J2 DASH | 12V | Supply for the dashboard button |
-| J2 DASH | ON / OFF | The button's two output wires |
-| J3 FLAP | DME | Signal wire, **car side** (cut wire, end going to the DME) |
-| J3 FLAP | FLAP | Signal wire, **actuator side** |
-| J3 FLAP | GND | Ground reference |
+| Terminal | Pin      | Connect to                                                                                   |
+| -------- | -------- | -------------------------------------------------------------------------------------------- |
+| J1 POWER | 12V      | Switched +12 V (after ignition) via an add-a-fuse tap in the rear fuse box, own 2-3 A fuse. **Not** the actuator supply wire. |
+| J1 POWER | GND      | Chassis bolt or battery negative post. **Not** the actuator ground wire.                     |
+| J2 DASH  | 12V      | Supply for the dashboard button                                                              |
+| J2 DASH  | ON / OFF | The button's two output wires                                                                |
+| J3 FLAP  | DME      | Signal wire, **car side** (cut wire, end going to the DME)                                   |
+| J3 FLAP  | FLAP     | Signal wire, **actuator side**                                                               |
+| J3 FLAP  | GND      | Same chassis ground as J1                                                                    |
 
-- Only the **signal wire** is cut. Actuator +12 V and ground stay untouched.
-- Use solder sleeves or crimped, heat-shrunk butt connectors. No scotch-lock taps under the car.
-- Keep the original connector intact where possible so the car can be returned to stock.
-- Finish with fabric harness tape. Mount the box away from heat.
+- Only the **signal wire** is cut, in the trunk loom above the grommet. Actuator +12 V and ground
+  stay untouched; the ground wire does not even need to be located.
+- Use solder sleeves or crimped, heat-shrunk butt connectors. No scotch-lock taps.
+- Keep the original connector intact so the car can be returned to stock.
+- Keep tap leads away from the twisted pairs in the loom. Finish with fabric harness tape.
+- Mount the box in the trunk cavity away from the fuse box and the battery positive cable.
 
 ## After installation
 
