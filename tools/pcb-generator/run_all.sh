@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Regenerates the v2 board: place -> autoroute (freerouting 2.x) -> ground pour -> DRC.
+# Regenerates the v3 board: place -> autoroute (freerouting 2.x) -> ground pour -> DRC.
 # Needs KiCad 7 (pcbnew Python module) and Java 21. Set FREEROUTING_JAR to the freerouting jar path.
 set -e
 cd "$(dirname "$0")"
@@ -8,7 +8,7 @@ python3 - <<'P'
 import pcbnew
 b=pcbnew.LoadBoard('placed.kicad_pcb')
 nc=b.GetDesignSettings().m_NetSettings.m_DefaultNetClass
-nc.SetTrackWidth(pcbnew.FromMM(0.4)); nc.SetClearance(pcbnew.FromMM(0.25))
+nc.SetTrackWidth(pcbnew.FromMM(0.3)); nc.SetClearance(pcbnew.FromMM(0.2))
 nc.SetViaDiameter(pcbnew.FromMM(0.8)); nc.SetViaDrill(pcbnew.FromMM(0.4))
 b.Save('placed.kicad_pcb')
 pcbnew.ExportSpecctraDSN(b,'board.dsn')
@@ -22,7 +22,7 @@ for i,ch in enumerate(seg):
 cls=seg[:i+1]; power=['+12V','+12V_F','+12V_IN','+5V','GND']
 sig=[n for n in cls.split('"')[2].split('(circuit')[0].split() if n not in power]
 via='(circuit (use_via Via[0-1]_800:400_um))'
-new=f'(class kicad_default "" {" ".join(sig)} {via} (rule (width 400) (clearance 250.1)))\n    (class power {" ".join(power)} {via} (rule (width 800) (clearance 250.1)))'
+new=f'(class kicad_default "" {" ".join(sig)} {via} (rule (width 300) (clearance 200.1)))\n    (class power {" ".join(power)} {via} (rule (width 600) (clearance 200.1)))'
 open(p,'w').write(t[:s]+new+seg[i+1:])
 P
 rm -f board.ses

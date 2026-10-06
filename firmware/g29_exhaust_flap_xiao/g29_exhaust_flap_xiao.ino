@@ -9,6 +9,11 @@
   Fail-safe: at power-up, on reset, or if the ESP32 dies, the relay is released
   and the car is back in control. R6/R8 (100k) on the PCB keep both transistors off during boot.
 
+  Controls: the original 433 MHz key fob, and the dashboard button of the commercial kit.
+  The button is not wired to this board: its cabin box transmits on 433 MHz like the fob,
+  so both arrive through the on-board SYN480R receiver (U3, DO -> GPIO5). Capture the codes
+  of both with the Serial Monitor.
+
   Libraries: rc-switch (sui77) - install from the Arduino Library Manager.
   Board: XIAO_ESP32C3 (Arduino core 2.x or 3.x). Enable "USB CDC On Boot" for Serial Monitor.
 
@@ -21,9 +26,7 @@
 // ===================== Pins (Seeed XIAO ESP32-C3, strapping pins 2/8/9 avoided) =====================
 constexpr int PIN_PWM      = 3;   // D1 -> PWM driver transistor
 constexpr int PIN_RELAY    = 4;   // D2 -> relay driver transistor. HIGH = ESP32 controls the actuator
-constexpr int PIN_RF_RX    = 5;   // D3 <- RXB6 data output
-constexpr int PIN_DASH_ON  = 6;   // D4 <- dashboard ON wire, through 12V->3.3V divider
-constexpr int PIN_DASH_OFF = 7;   // D5 <- dashboard OFF wire, through 12V->3.3V divider
+constexpr int PIN_RF_RX    = 5;   // D3 <- SYN480R DO (on-board 433 MHz receiver)
 constexpr int PIN_LED      = -1;  // XIAO ESP32-C3 has no user LED
 
 // ===================== Signal parameters - SET FROM YOUR MEASUREMENTS =====================
@@ -34,17 +37,19 @@ constexpr float    DUTY_CLOSED_PCT = 5.0f;   // F30 data, verify on the G29
 constexpr bool     PWM_INVERTED    = true;   // true with a low-side MOSFET + pull-up to 12V
 
 // ===================== Behaviour =====================
-constexpr bool     DASH_OFF_MEANS_AUTO      = true;  // dashboard OFF returns to factory mode
+constexpr bool     BTN_OFF_MEANS_AUTO       = true;  // dashboard-button OFF returns to factory mode
 constexpr bool     ALLOW_FORCED_CLOSED      = true;  // remote OFF forces the flap closed
 constexpr uint32_t FORCED_CLOSED_TIMEOUT_MS = 15UL * 60UL * 1000UL;  // back to AUTO after 15 min
 constexpr uint32_t RELAY_SETTLE_MS          = 20;
-constexpr uint32_t DEBOUNCE_MS              = 50;
 
 // ===================== Remote codes =====================
 // Leave at 0, open the Serial Monitor (115200), press each fob button, then paste the codes here.
-constexpr unsigned long RF_CODE_ON   = 0;
-constexpr unsigned long RF_CODE_AUTO = 0;
-constexpr unsigned long RF_CODE_OFF  = 0;
+constexpr unsigned long RF_CODE_ON   = 0;   // fob ON
+constexpr unsigned long RF_CODE_AUTO = 0;   // fob AUTO
+constexpr unsigned long RF_CODE_OFF  = 0;   // fob OFF
+// Dashboard button (via the kit's cabin box). May be the same codes as the fob; if so leave at 0.
+constexpr unsigned long RF_CODE_BTN_ON  = 0;
+constexpr unsigned long RF_CODE_BTN_OFF = 0;
 constexpr uint32_t      RF_REPEAT_IGNORE_MS = 600;  // fobs repeat the code while held
 
 // ===================== State =====================
@@ -52,15 +57,6 @@ enum class Mode { AUTO, FORCED_OPEN, FORCED_CLOSED };
 Mode     mode      = Mode::AUTO;
 uint32_t modeSince = 0;
 RCSwitch rf;
-
-struct DebouncedInput {
-  int pin;
-  bool stable;
-  bool lastRaw;
-  uint32_t changedAt;
-};
-DebouncedInput dashOn  {PIN_DASH_ON,  false, false, 0};
-DebouncedInput dashOff {PIN_DASH_OFF, false, false, 0};
 
 // ===================== PWM helpers (core 2.x and 3.x) =====================
 void pwmInit() {
@@ -120,31 +116,6 @@ void applyMode(Mode m) {
 }
 
 // ===================== Inputs =====================
-bool risingEdge(DebouncedInput& in) {
-  bool raw = digitalRead(in.pin) == HIGH;
-  uint32_t now = millis();
-  if (raw != in.lastRaw) {
-    in.lastRaw = raw;
-    in.changedAt = now;
-  }
-  if (raw != in.stable && now - in.changedAt >= DEBOUNCE_MS) {
-    in.stable = raw;
-    return raw;  // true only on a debounced LOW -> HIGH transition
-  }
-  return false;
-}
-
-void handleDashboard() {
-  if (risingEdge(dashOn)) {
-    Serial.println("[dash] ON");
-    applyMode(Mode::FORCED_OPEN);
-  }
-  if (risingEdge(dashOff)) {
-    Serial.println("[dash] OFF");
-    applyMode(DASH_OFF_MEANS_AUTO ? Mode::AUTO : Mode::FORCED_CLOSED);
-  }
-}
-
 void handleRemote() {
   static unsigned long lastCode = 0;
   static uint32_t lastCodeAt = 0;
@@ -169,6 +140,9 @@ void handleRemote() {
   if (RF_CODE_ON   != 0 && code == RF_CODE_ON)   applyMode(Mode::FORCED_OPEN);
   else if (RF_CODE_AUTO != 0 && code == RF_CODE_AUTO) applyMode(Mode::AUTO);
   else if (RF_CODE_OFF  != 0 && code == RF_CODE_OFF)  applyMode(Mode::FORCED_CLOSED);
+  else if (RF_CODE_BTN_ON  != 0 && code == RF_CODE_BTN_ON)  applyMode(Mode::FORCED_OPEN);
+  else if (RF_CODE_BTN_OFF != 0 && code == RF_CODE_BTN_OFF)
+    applyMode(BTN_OFF_MEANS_AUTO ? Mode::AUTO : Mode::FORCED_CLOSED);
 }
 
 void handleTimeouts() {
@@ -187,9 +161,6 @@ void setup() {
   pwmInit();
   pwmWriteRaw(0);
 
-  pinMode(PIN_DASH_ON, INPUT);   // external divider acts as pull-down
-  pinMode(PIN_DASH_OFF, INPUT);
-
   WiFi.mode(WIFI_OFF);           // not used for now
   Serial.begin(115200);
 
@@ -198,14 +169,13 @@ void setup() {
   Serial.println();
   Serial.println("G29 exhaust flap controller - started in AUTO (car in control)");
   if (RF_CODE_ON == 0 || RF_CODE_AUTO == 0 || RF_CODE_OFF == 0) {
-    Serial.println("Remote codes not set: press each fob button and copy the codes shown.");
+    Serial.println("Remote codes not set: press each fob button, then the dashboard button, and copy the codes shown.");
   }
   Serial.printf("PWM %lu Hz, open %.0f%%, closed %.0f%% (verify these on the car!)\n",
                 (unsigned long)PWM_FREQ_HZ, DUTY_OPEN_PCT, DUTY_CLOSED_PCT);
 }
 
 void loop() {
-  handleDashboard();
   handleRemote();
   handleTimeouts();
 }

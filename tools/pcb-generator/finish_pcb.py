@@ -49,8 +49,17 @@ for netnode in find(next(find(routes, 'network_out')), 'net'):
         b.Add(via); nv += 1
 print('tracks', nt, 'vias', nv)
 
+# ---- drop GND tracks that hug the board edge (the ground pour connects these anyway) ----
+OX, OY, W, H = 100, 100, 58, 40
+def near_edge(pt, lim=0.6):
+    x, y = pcbnew.ToMM(pt.x) - OX, pcbnew.ToMM(pt.y) - OY
+    return min(x, W - x, y, H - y) < lim
+drop = [t for t in b.GetTracks() if t.GetClass() == 'PCB_TRACK' and t.GetNetname() == 'GND'
+        and (near_edge(t.GetStart()) or near_edge(t.GetEnd()))]
+for t in drop: b.Remove(t)
+print('edge GND tracks removed', len(drop))
+
 # ---- ground pours on both layers ----
-OX, OY, W, H = 100, 100, 60, 46
 gnd = b.FindNet('GND')
 for layer in (pcbnew.F_Cu, pcbnew.B_Cu):
     z = pcbnew.ZONE(b); z.SetLayer(layer); z.SetNet(gnd)
@@ -71,13 +80,15 @@ def silk(txt, x, y, size=1.0, layer=pcbnew.F_SilkS):
     b.Add(t)
 
 for f in b.GetFootprints():
-    if f.GetReference() in ("U1A", "U1B", "J1", "J2", "J3"): f.Reference().SetVisible(False)
-silk("J2: 12V ON OFF", 7.5, 36.9, 0.8)
-silk("J1: 12V GND", 26.0, 36.9, 0.8)
-silk("J3: DME FLAP GND", 47.5, 36.9, 0.8)
+    if f.GetReference() in ("U1A", "U1B", "J1", "J3", "C3", "C4", "ANT1", "C7", "C8", "C9", "L1", "L2", "R12", "Y1", "D5", "D6"): f.Reference().SetVisible(False)
+silk("J1: 12V GND", 5.75, 30.6, 0.8)
+silk("J3: DME FLAP", 24.0, 30.6, 0.8)
 silk("XIAO ESP32-C3  USB ^", 11.6, 1.5, 0.8)
-silk("G29 flap ctrl v2 (XIAO)", 30.0, 23.0, 1.2, pcbnew.B_SilkS)
-silk("R10 OR R11", 47.0, 35.0, 0.8)
+silk("ANT", 29.5, 2.5, 0.8)
+silk("433 RX", 24.5, 9.0, 0.8, pcbnew.B_SilkS)
+silk("G29 flap ctrl v3", 15.0, 27.5, 1.2, pcbnew.B_SilkS)
+silk("fit R10 (to GND) or R11 (to 12V)", 15.0, 30.0, 0.8, pcbnew.B_SilkS)
+silk("R9 optional pull-up", 15.0, 32.3, 0.8, pcbnew.B_SilkS)
 pcbnew.ZONE_FILLER(b).Fill(b.Zones())
 out = 'g29_flap_xiao.kicad_pcb'
 b.Save(out)
