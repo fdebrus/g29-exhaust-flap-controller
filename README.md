@@ -24,24 +24,33 @@ ESP32-C3 PWM driver ---| NO              |
 - The relay's second pole connects a **dummy load** to the DME while the ESP32-C3 is in control,
   to try to avoid an open-circuit fault code.
 
-Controls: the dashboard button (two 12 V wires, ON / OFF) and the original 433 MHz key fob (ON / AUTO / OFF).
+Controls: the original 433 MHz key fob (ON / AUTO / OFF) and the kit's dashboard button, whose
+cabin box also transmits on 433 MHz. Nothing is wired from the dashboard to the board.
 
 ## Hardware
 
-One board: **Seeed XIAO ESP32-C3**, 60 x 46 mm, 2 layers. The earlier ESP32-DevKitC version was
-removed (too large for the trunk cavity); it remains available in the git history before the
-`v1-removed` tag.
+Board **v3**: Seeed XIAO ESP32-C3 on socket strips, **on-board 433 MHz receiver** (JSMSEMI
+SYN480R + 13.52127 MHz crystal, wire antenna pad), SMT passives (0603/0805, SMA, SOD-123,
+SOT-23, DPAK), Omron G5V-2 DPDT relay, two 2-pin screw terminals. **58 x 40 mm**, 2 layers,
+29 placed parts, designed for JLCPCB assembly (`hardware/v3-xiao-esp32c3/jlcpcb/`). No RXB6
+module any more.
+
+Earlier boards are in the git history only: v2 (same circuit with through-hole parts, an RXB6
+module and a wired dashboard input, 60 x 46 mm) before the `v2-removed` tag, v1 (ESP32-DevKitC)
+before the `v1-removed` tag.
 
 ## Project status
 
 - [x] Teardown and analysis of the commercial kit ([docs/findings.md](docs/findings.md))
-- [x] Firmware (AUTO / ON / OFF, dashboard + 433 MHz remote, fail-safe start)
-- [x] PCB (XIAO ESP32-C3, 60 x 46 mm)
+- [x] Firmware (AUTO / ON / OFF over 433 MHz: fob + dashboard button, fail-safe start)
+- [x] PCB v3 (XIAO ESP32-C3, on-board SYN480R receiver, SMT, 58 x 40 mm, 3 mounting holes, DRC clean)
+- [x] 3D-printed enclosure (OpenSCAD, 62.8 x 44.8 x 26 mm, not yet test-printed)
+- [ ] Receiver sensitivity check against an RXB6 (first board)
 - [x] Harness survey on the car: tap point and wire identification ([docs/harness.md](docs/harness.md))
 - [ ] **Bench measurement of the kit's output signal** ([docs/measurement.md](docs/measurement.md))
 - [ ] Measurement on the car (DME signal, actuator input impedance)
 - [ ] Set PWM frequency / duty cycles in the firmware
-- [ ] Verify XIAO footprint (1:1 print) and order the PCB
+- [ ] Verify XIAO footprint (1:1 print) and order the assembled PCB
 - [ ] Assembly, bench test, installation ([docs/installation.md](docs/installation.md))
 - [ ] Check fault memory after a few drives
 
@@ -50,7 +59,7 @@ removed (too large for the trunk cavity); it remains available in the git histor
 | Path                              | Content                                                      |
 | --------------------------------- | ------------------------------------------------------------ |
 | `firmware/g29_exhaust_flap_xiao/` | Firmware (Seeed XIAO ESP32-C3)                               |
-| `hardware/v2-xiao-esp32c3/`       | KiCad board, Gerbers, BOM, previews                          |
+| `hardware/v3-xiao-esp32c3/`       | KiCad board, Gerbers, previews, DRC report, JLCPCB BOM + CPL, 3D-printed enclosure |
 | `tools/pcb-generator/`            | Scripts that regenerate the board (KiCad 7 + freerouting)    |
 | `docs/`                           | Findings, harness survey, measurement, installation, shopping list |
 
