@@ -40,10 +40,34 @@ a trunk box, and a 3-button key fob (ON / AUTO / OFF). Seller confirmed in writi
 - Two channels probably serve cars with two flap actuators.
 - Seller: signal voltage 12 V, signal wire in their harness is **red-black**.
 
+### Bench measurement of the trunk box (7 Oct 2026)
+Stabilised 12.0 V supply, multimeter (DC) on the three output wires: black = ground, red = 12 V
+permanent, yellow = signal.
+
+| Kit mode | Yellow (V) | As % of supply |
+| -------- | ---------- | -------------- |
+| Open     | 10.48      | 87 %           |
+| Auto     | 5.95       | 50 %           |
+| Off      | 1.41       | 12 %           |
+
+These are multimeter averages: three fixed levels, consistent with a PWM at 12 V level driven
+actively (push-pull), or with three DC levels; a multimeter cannot tell. Frequency and duty cycle
+are to be measured with `tools/pwm_probe` (see [measurement.md](measurement.md)).
+
+**The kit never connects to the DME.** Its harness drives the actuator only; the car's signal wire
+is left unconnected. "Auto" is simply a fixed 50 % output, not a copy of the car's signal. This is
+the real reason the kit cannot hand control back: there is no path for it.
+
 ### Conclusion on signal type
-A simple transistor output with no LIN transceiver, a 3-wire actuator and the F30 data all point
-to **PWM at 12 V level**, probably open-collector with a pull-up of roughly 510 Ω to 1 kΩ.
-**Still inferred** - confirm with the bench test in [measurement.md](measurement.md).
+Three fixed output levels at 12 V, a transistor output stage, a 3-wire actuator and the F30 data
+all point to **PWM at 12 V level, driven actively**. Consequence for our board: fit **R9** (1 k
+pull-up) so the open-collector driver produces a 12 V level too. Frequency still to be measured.
+
+### Open questions (car only)
+- The DME's own frequency, levels and Comfort/Sport duty cycles (pwm_probe at the actuator connector).
+- Whether the DME logs a fault with its signal wire open (the kit was never installed in the car,
+  so there is no field evidence either way); decides whether R10/R11 are populated.
+- Whether the actuator is proportional (what does the flap do at the kit's 50 %?).
 
 ## Commercial alternatives (if you don't want to build)
 
