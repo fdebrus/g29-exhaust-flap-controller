@@ -63,10 +63,30 @@ Three fixed output levels at 12 V, a transistor output stage, a 3-wire actuator 
 all point to **PWM at 12 V level, driven actively**. Consequence for our board: fit **R9** (1 k
 pull-up) so the open-collector driver produces a 12 V level too. Frequency still to be measured.
 
+### What the internet says about the DME signal (Oct 2026)
+Collected from forum threads where people reverse-engineered three-wire BMW/VAG flap actuators.
+None of it is for the G29 specifically; weight accordingly.
+
+| Claim | Source | Weight |
+| ----- | ------ | ------ |
+| PWM ≈ **100 Hz** from the ECU to the actuator | mikrocontroller.net 499517 and 310954, forum-3dcenter.org 587113 (actuator-maker insider), Pico forum (F30) | Four independent sources agree: strong |
+| Duty 10 % / 90 % (or 5 % / 95 %) for the two end positions, control is stepless | mikrocontroller.net 310954, Pico forum | Consistent with our kit (12 % / 87 %); the SST controller offers ¼ ½ ¾ positions, so proportional: strong |
+| Polarity: high = open | Pico F30 capture, our kit | mikrocontroller.net 499517 says the opposite (9 ms *low* = open) but is second-hand: **unsettled, measure on the car** |
+| Low level ≈ 2 V, high ≈ 12 V; drive the input through ~1 kΩ from 12 V | mikrocontroller.net 310954 | Matches an open-collector drive with pull-up: supports fitting R9 |
+| **The actuator answers**: "smart" actuator with its own MCU; data to the ECU by ground-keying during the low phase of the ECU's PWM; two diagnostic states reported | forum-3dcenter.org 587113, mikrocontroller.net 310954 | Plausible and consistent with faults 138102/138104 being about a missing/wrong reply |
+
+Consequence of the last point for this project: a resistor (R10/R11) cannot answer the DME, so a
+fault will probably be logged while the ESP32 drives the flap. If that turns out to matter, the
+fix is firmware: in ON/OFF mode, listen to the DME side (available at the relay's second pole) and
+reproduce the actuator's reply. That needs the reply captured on the car with a logic analyser first.
+In AUTO the DME and actuator keep a real wire between them, so the link is untouched.
+
 ### Open questions (car only)
-- The DME's own frequency, levels and Comfort/Sport duty cycles (pwm_probe at the actuator connector).
+- The DME's own frequency, levels, polarity and Comfort/Sport duty cycles (pwm_probe at the actuator connector).
+- The actuator's reply in the low phase: capture a few seconds of raw waveform with the logic
+  analyser (8 MHz is plenty) in Comfort and Sport.
 - Whether the DME logs a fault with its signal wire open (the kit was never installed in the car,
-  so there is no field evidence either way); decides whether R10/R11 are populated.
+  so there is no field evidence either way); decides whether R10/R11 or the reply emulation are needed.
 - Whether the actuator is proportional (what does the flap do at the kit's 50 %?).
 
 ## Commercial alternatives (if you don't want to build)
