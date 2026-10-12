@@ -38,6 +38,8 @@ constexpr bool     PWM_INVERTED    = true;   // true with a low-side MOSFET + pu
 
 // ===================== Behaviour =====================
 constexpr bool     BTN_OFF_MEANS_AUTO       = true;  // dashboard-button OFF returns to factory mode
+constexpr bool     ON_TOGGLES_TO_AUTO       = false; // ON while already forced open -> AUTO (for a single-code button)
+constexpr uint32_t ON_TOGGLE_GUARD_MS       = 2000;  // a held/repeated ON within this window does not toggle back
 constexpr bool     ALLOW_FORCED_CLOSED      = true;  // remote OFF forces the flap closed
 constexpr uint32_t FORCED_CLOSED_TIMEOUT_MS = 15UL * 60UL * 1000UL;  // back to AUTO after 15 min
 constexpr uint32_t RELAY_SETTLE_MS          = 20;
@@ -146,7 +148,12 @@ void handleRemote() {
 
   if (bits != 24) return;
   if (RF_ADDRESS != 0 && addr == RF_ADDRESS) {
-    if      (btn == RF_BTN_ON)   applyMode(Mode::FORCED_OPEN);
+    if (btn == RF_BTN_ON) {
+      if (ON_TOGGLES_TO_AUTO && mode == Mode::FORCED_OPEN && now - modeSince > ON_TOGGLE_GUARD_MS)
+        applyMode(Mode::AUTO);
+      else
+        applyMode(Mode::FORCED_OPEN);
+    }
     else if (btn == RF_BTN_AUTO) applyMode(Mode::AUTO);
     else if (btn == RF_BTN_OFF)  applyMode(Mode::FORCED_CLOSED);
   } else if (RF_ADDRESS_BTN != 0 && addr == RF_ADDRESS_BTN) {
