@@ -43,13 +43,18 @@ constexpr uint32_t FORCED_CLOSED_TIMEOUT_MS = 15UL * 60UL * 1000UL;  // back to 
 constexpr uint32_t RELAY_SETTLE_MS          = 20;
 
 // ===================== Remote codes =====================
-// Leave at 0, open the Serial Monitor (115200), press each fob button, then paste the codes here.
-constexpr unsigned long RF_CODE_ON   = 0;   // fob ON
-constexpr unsigned long RF_CODE_AUTO = 0;   // fob AUTO
-constexpr unsigned long RF_CODE_OFF  = 0;   // fob OFF
-// Dashboard button (via the kit's cabin box). May be the same codes as the fob; if so leave at 0.
-constexpr unsigned long RF_CODE_BTN_ON  = 0;
-constexpr unsigned long RF_CODE_BTN_OFF = 0;
+// The fob is an EV1527-style 24-bit transmitter: 20-bit address + 4-bit button (rc-switch protocol 1).
+// Measured 12 Oct 2026: ON = 954817 (0xE91C1), OFF = 954818 (0xE91C2), AUTO = 954820 (0xE91C4).
+// Any code whose upper 20 bits match RF_ADDRESS is accepted; the low nibble selects the button.
+// To pair another fob: set RF_ADDRESS = 0, open the Serial Monitor, press a button, copy the address.
+constexpr unsigned long RF_ADDRESS  = 0xE91C;   // upper 20 bits of the fob's codes (0 = accept any, log only)
+constexpr uint8_t       RF_BTN_ON   = 0x1;
+constexpr uint8_t       RF_BTN_OFF  = 0x2;
+constexpr uint8_t       RF_BTN_AUTO = 0x4;
+// Dashboard button (via the kit's cabin box). If it uses another address, put it here (0 = unused).
+constexpr unsigned long RF_ADDRESS_BTN = 0;
+constexpr uint8_t       RF_BTN_BTN_ON  = 0x1;
+constexpr uint8_t       RF_BTN_BTN_OFF = 0x2;
 constexpr uint32_t      RF_REPEAT_IGNORE_MS = 600;  // fobs repeat the code while held
 
 // ===================== State =====================
@@ -135,14 +140,19 @@ void handleRemote() {
   lastCode = code;
   lastCodeAt = now;
 
-  Serial.printf("[rf] code=%lu bits=%u protocol=%u\n", code, bits, proto);
+  unsigned long addr = code >> 4;
+  uint8_t btn = code & 0xF;
+  Serial.printf("[rf] code=%lu bits=%u protocol=%u addr=0x%lX btn=0x%X\n", code, bits, proto, addr, btn);
 
-  if (RF_CODE_ON   != 0 && code == RF_CODE_ON)   applyMode(Mode::FORCED_OPEN);
-  else if (RF_CODE_AUTO != 0 && code == RF_CODE_AUTO) applyMode(Mode::AUTO);
-  else if (RF_CODE_OFF  != 0 && code == RF_CODE_OFF)  applyMode(Mode::FORCED_CLOSED);
-  else if (RF_CODE_BTN_ON  != 0 && code == RF_CODE_BTN_ON)  applyMode(Mode::FORCED_OPEN);
-  else if (RF_CODE_BTN_OFF != 0 && code == RF_CODE_BTN_OFF)
-    applyMode(BTN_OFF_MEANS_AUTO ? Mode::AUTO : Mode::FORCED_CLOSED);
+  if (bits != 24) return;
+  if (RF_ADDRESS != 0 && addr == RF_ADDRESS) {
+    if      (btn == RF_BTN_ON)   applyMode(Mode::FORCED_OPEN);
+    else if (btn == RF_BTN_AUTO) applyMode(Mode::AUTO);
+    else if (btn == RF_BTN_OFF)  applyMode(Mode::FORCED_CLOSED);
+  } else if (RF_ADDRESS_BTN != 0 && addr == RF_ADDRESS_BTN) {
+    if      (btn == RF_BTN_BTN_ON)  applyMode(Mode::FORCED_OPEN);
+    else if (btn == RF_BTN_BTN_OFF) applyMode(BTN_OFF_MEANS_AUTO ? Mode::AUTO : Mode::FORCED_CLOSED);
+  }
 }
 
 void handleTimeouts() {
@@ -168,8 +178,8 @@ void setup() {
 
   Serial.println();
   Serial.println("G29 exhaust flap controller - started in AUTO (car in control)");
-  if (RF_CODE_ON == 0 || RF_CODE_AUTO == 0 || RF_CODE_OFF == 0) {
-    Serial.println("Remote codes not set: press each fob button, then the dashboard button, and copy the codes shown.");
+  if (RF_ADDRESS == 0) {
+    Serial.println("RF_ADDRESS not set: press a fob button and copy the addr shown into RF_ADDRESS.");
   }
   Serial.printf("PWM %lu Hz, open %.0f%%, closed %.0f%% (verify these on the car!)\n",
                 (unsigned long)PWM_FREQ_HZ, DUTY_OPEN_PCT, DUTY_CLOSED_PCT);
